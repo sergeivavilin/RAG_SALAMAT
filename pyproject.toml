@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "rag-salamat"
+version = "0.1.0"
+description = ""
+authors = ["Sergey Vavilin <vavilin.dev@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pre-commit = "^4.2.0"
+fastapi = {extras = ["standard"], version = "^0.115.12"}
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+mypy = "^1.16.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
