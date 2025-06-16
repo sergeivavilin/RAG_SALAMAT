@@ -6,6 +6,9 @@ from pydantic import BaseModel, Field
 
 load_dotenv()
 
+if not os.getenv("OPENAI_API_KEY"):
+    raise ValueError("OPENAI_API_KEY not found in environment variables")
+
 
 class LLMSettings(BaseModel):  # type: ignore
     """Конфигурация для языковой модели OpenAI."""
