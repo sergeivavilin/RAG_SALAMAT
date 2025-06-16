@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 pre-commit = "^4.2.0"
 fastapi = {extras = ["standard"], version = "^0.115.12"}
+langchain = {extras = ["openai"], version = "^0.3.25"}
 
 
 [tool.poetry.group.dev.dependencies]
