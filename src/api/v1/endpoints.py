@@ -6,7 +6,7 @@ from src.common.llm_model import LLM, SYSTEM_PROMPT
 router: APIRouter = APIRouter()
 
 
-@router.get("/ask_llm")  # type: ignore[misc]
+@router.get("/ask_llm")  # type: ignore
 async def ask_agent(human_input: str) -> dict[str, str]:
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
