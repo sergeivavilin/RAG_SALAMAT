@@ -23,6 +23,7 @@ psycopg = {extras = ["binary"], version = "^3.2.9"}
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
 mypy = "^1.16.0"
+isort = "^6.0.1"
 
 [tool.mypy]
 plugins = ['pydantic.mypy']
