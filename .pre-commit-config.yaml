@@ -31,4 +31,6 @@ repos:
   rev: v1.8.0
   hooks:
     - id: mypy
+      additional_dependencies:
+        - pydantic
       args: [--strict, --ignore-missing-imports]
