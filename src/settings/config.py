@@ -32,10 +32,10 @@ def _get_system_prompt() -> str:
 AGENT_PROMPT = _get_system_prompt()
 
 
-class OpenAIModel(BaseModel):  # type: ignore
+class OpenAIModel(BaseModel):
     """Базовый класс для языковой модели OpenAI."""
 
-    openai_api_key: str = Field(
+    openai_api_key: Optional[str] = Field(
         default=os.getenv("OPENAI_API_KEY"), description="API-ключ OpenAI"
     )
     timeout: Optional[int] = Field(default=5, description="Таймаут запроса в секундах")
