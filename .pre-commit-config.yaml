@@ -10,7 +10,6 @@ repos:
   - id: check-merge-conflict
   - id: debug-statements
   - id: check-added-large-files
-  - id: double-quote-string-fixer
   - id: name-tests-test
 - repo: https://github.com/PyCQA/isort
   rev: 5.12.0
