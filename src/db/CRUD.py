@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from src.common.Schemas.pharmacy_schemas import PharmacyProductSchema
 from src.db.database import engine, get_db
 from src.db.db_logger_config import db_logger
-from src.db.Models.pharmacy_models import Base, Pharmacy, PharmacyProduct, Product
+from src.db.Models import Base, Pharmacy, PharmacyProduct, Product
 
 
 def create_db() -> str:
