@@ -71,14 +71,17 @@ def __get_json_from_url(
 
 
 def __get_pharmacy_products_from_json(
-    json_data: Dict[Any, Any],
+    json_data: Optional[Dict[Any, Any]],
 ) -> List[PharmacyProductSchema]:
     """
     Получает список PharmacyProductSchema из JSON-данных.
     :param json_data: Словарь с ключом "Products", содержащим список продуктов
     :return: Список PharmacyProductSchema
     """
-
+    if not json_data:
+        raise ValueError(
+            "JSON data is required. Please provide a valid JSON dictionary."
+        )
     pharmacy_products = TypeAdapter(List[PharmacyProductSchema]).validate_python(
         json_data["Products"]
     )
@@ -88,15 +91,18 @@ def __get_pharmacy_products_from_json(
 def update_db(
     db: Annotated[Session, Depends(get_db)],
     json_url: str = "https://salamat.cloud1c.pro/FileGPT/SalamatProducts.json",
+    json_data: Optional[Dict[Any, Any]] = None,
 ) -> int:
     """
     Обновляет базу данных с bulk-операциями для ускорения массовой загрузки.
 
     :param json_url: URL с JSON-данными
+    :param json_data: (опционально) JSON-данные
     :param db: SQLAlchemy session
     :return: Количество добавленных записей
     """
-    json_data = __get_json_from_url(json_url)
+    if not json_data:
+        json_data = __get_json_from_url(json_url)
     pydantic_list_of_products = __get_pharmacy_products_from_json(json_data)
     counter = 0
 

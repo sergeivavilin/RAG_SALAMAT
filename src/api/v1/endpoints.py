@@ -126,10 +126,11 @@ async def create_tables() -> Dict[str, Any]:
 
 @router.post("/update_DB", tags=["database"])
 async def update_db_from_1c(
-    # url: str,
+    request: Request,
     db: Annotated[Session, Depends(get_db)],
 ) -> Dict[str, Any]:
-    amount_updated = update_db(db)
+    json_data = await request.json()
+    amount_updated = update_db(db, json_data=json_data if json_data else None)
     return {"status_code": 201, "message": f"Total updated: {amount_updated}"}
 
 
@@ -140,7 +141,7 @@ async def delete_db() -> Dict[str, Any]:
 
 
 @router.get("/test_request", tags=["test_request"])
-async def test_request() -> Dict[str, Any]:
-    response = requests.get("https://google.com/")
+async def test_request(request: Request, url: str) -> Dict[str, Any]:
+    response = requests.get(url)
     res = response.status_code
     return {"status_code": 201, "message": f"{res}"}
