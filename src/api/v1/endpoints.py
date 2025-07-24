@@ -1,3 +1,4 @@
+import requests  # type: ignore
 from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends
@@ -136,3 +137,10 @@ async def update_db_from_1c(
 async def delete_db() -> Dict[str, Any]:
     message = drop_db()
     return {"status_code": 201, "message": f"{message}"}
+
+
+@router.get("/test_request", tags=["test_request"])
+async def test_request() -> Dict[str, Any]:
+    response = requests.get("https://google.com/")
+    res = response.status_code
+    return {"status_code": 201, "message": f"{res}"}
