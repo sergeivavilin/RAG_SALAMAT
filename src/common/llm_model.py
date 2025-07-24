@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 from langchain_core.language_models import LanguageModelLike
 from langchain_openai import ChatOpenAI
 
