@@ -28,4 +28,5 @@ repos:
     - id: mypy
       additional_dependencies:
         - pydantic
+        - fastapi
       args: [--strict, --ignore-missing-imports]
