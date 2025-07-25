@@ -13,8 +13,6 @@ if not os.getenv("PINECONE_API_KEY"):
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
 index = pc.Index(
-    # name="n8n-salamat-names",
-    # host="https://n8n-salamat-names-rkhbx77.svc.aped-4627-b74a.pinecone.io",
     name="salamat-names",
     host="https://salamat-names-rkhbx77.svc.aped-4627-b74a.pinecone.io",
 )
