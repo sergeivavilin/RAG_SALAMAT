@@ -114,7 +114,6 @@ tools: List[BaseTool] = [
 ]
 tool_node = ToolNode(tools)
 
-# llm = ChatOpenAI(model="gpt-4o-mini").bind_tools(tools)
 llm = LLM.bind_tools(tools)
 
 
@@ -127,9 +126,6 @@ def model_call(state: AgentState) -> AgentState:
 def should_continue(state: AgentState) -> str:
     messages = state["messages"]
     last_message = messages[-1]
-    # if not last_message.tool_calls:
-    #     return "end"
-    # return "continue"
 
     if isinstance(last_message, AIMessage) and last_message.tool_calls:
         return "continue"
