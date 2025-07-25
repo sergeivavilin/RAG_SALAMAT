@@ -1,4 +1,3 @@
-import requests  # type: ignore
 from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends
@@ -9,7 +8,7 @@ from starlette.requests import Request
 from src.common.tools.ReAct_agent import agent
 from src.db.CRUD import create_db, drop_db, update_db
 from src.db.database import get_db
-from src.db.Models import Pharmacy, PharmacyProduct, Product
+from src.db.Models import Pharmacy, Product
 
 router: APIRouter = APIRouter()
 
@@ -60,57 +59,10 @@ async def get_all_products(db: Annotated[Session, Depends(get_db)]) -> Dict[str,
     return {"status_code": 201, "message": f"Total products: {len(amount_updated)}"}
 
 
-@router.get("/get_all_pharmacies_by_product_name", tags=["database"])
-async def get_all_pharmacies_by_product(
-    product_name: str, db: Annotated[Session, Depends(get_db)]
-) -> Dict[str, Any]:
-    stmt = (
-        select(Pharmacy)
-        .join(PharmacyProduct, Pharmacy.id == PharmacyProduct.pharmacy_id)
-        .join(Product, Product.id == PharmacyProduct.product_id)
-        .where(Product.name == product_name)
-    )
-    pharmacies_products = db.scalars(stmt).all()
-
-    return {
-        "status_code": 201,
-        "message": f"Total products: {len(pharmacies_products)}",
-    }
-
-
-@router.get("/get_all_pharmacies_by_like_product_name", tags=["database"])
-async def get_all_pharmacies_by_like_product_name(
-    product_name: str, db: Annotated[Session, Depends(get_db)]
-) -> Dict[str, Any]:
-    stmt = (
-        select(Pharmacy)
-        .join(PharmacyProduct, Pharmacy.id == PharmacyProduct.pharmacy_id)
-        .join(Product, Product.id == PharmacyProduct.product_id)
-        .where(Product.name.ilike(f"%{product_name}%"))
-    )
-    pharmacies_products = db.scalars(stmt).all()
-
-    return {
-        "status_code": 201,
-        "message": f"Total products: {len(pharmacies_products)}",
-    }
-
-
 @router.get("/get_all_pharmacies", tags=["database"])
 async def get_all_pharmacies(db: Annotated[Session, Depends(get_db)]) -> Dict[str, Any]:
     amount_updated = db.scalars(select(Pharmacy)).all()
     return {"status_code": 201, "message": f"Total pharmacies: {amount_updated}"}
-
-
-@router.get("/get_all_pharmacies_products", tags=["database"])
-async def get_all_pharmacies_products(
-    db: Annotated[Session, Depends(get_db)],
-) -> Dict[str, Any]:
-    amount_updated = db.scalars(select(PharmacyProduct)).all()
-    return {
-        "status_code": 201,
-        "message": f"Total pharmacies_products: {amount_updated}",
-    }
 
 
 @router.post("/create_DB", tags=["database"])
@@ -144,10 +96,3 @@ async def update_db_from_1c(
 async def delete_db() -> Dict[str, Any]:
     message = drop_db()
     return {"status_code": 201, "message": f"{message}"}
-
-
-@router.get("/test_request", tags=["test_request"])
-async def test_request(request: Request, url: str) -> Dict[str, Any]:
-    response = requests.get(url)
-    res = response.status_code
-    return {"status_code": 201, "message": f"{res}"}
