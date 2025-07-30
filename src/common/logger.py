@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 # Formatters
 formater = logging.Formatter(
-    fmt="%(levelname)-7s %(asctime)s.%(msecs)03d %(module)10s:%(lineno)-3d  - %(message)s",
+    fmt="[%(asctime)s.%(msecs)03d] %(levelname)-7s %(module)10s:%(lineno)-3d  - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
