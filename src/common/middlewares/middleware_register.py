@@ -12,6 +12,10 @@ async def debug_middleware(
     request: Request, call_next: Callable[[Request], Awaitable[Response]]
 ) -> Response:
     start_decoding_time = time.perf_counter()
+    request_body = await request.body()
+
+    request.state.raw_body = request_body
+
     # Считаем чистое время ответа
     start_time = time.perf_counter()
     response = await call_next(request)
@@ -32,13 +36,14 @@ async def debug_middleware(
     )
     total_decoding_time = round(time.perf_counter() - start_decoding_time, 3)
     # Логируем запрос и ответ
-    request_body = await request.json()
+
+    body = request_body.decode("utf-8", errors="ignore")
     logger.debug(
         "--> Request from %s %s to %s - request body: %s",
         request.client,
         request.method,
         request.url,
-        request_body,
+        body,
     )
     logger.debug(
         "<-- Response took %s seconds - total time response took %s seconds - response body: %s",
