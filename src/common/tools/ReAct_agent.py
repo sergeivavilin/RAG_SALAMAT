@@ -149,4 +149,4 @@ graph.add_conditional_edges(
 
 graph.add_edge("tools", "agent")
 
-agent = graph.compile(checkpointer=InMemorySaver(), debug=True)
+agent = graph.compile(checkpointer=InMemorySaver(), debug=False)
