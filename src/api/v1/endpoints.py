@@ -10,8 +10,10 @@ from src.common.tools.ReAct_agent import agent
 from src.db.CRUD import create_db, drop_db, update_db
 from src.db.database import get_db
 from src.db.Models import Pharmacy, Product
+from src.common.logger import logger
 
 router: APIRouter = APIRouter()
+logger.info("Starting app .....")
 
 
 @router.get("/ask_llm", tags=["Agent"])
