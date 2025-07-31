@@ -1,9 +1,8 @@
 from fastapi import FastAPI
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.middleware.cors import CORSMiddleware
 
 from src.api.v1 import endpoints
-from src.common.middlewares import log_middleware
+from src.common.middlewares.middleware_register import register_middlewares
+
 
 app = FastAPI(
     title="FastAPI Test Salamat",
@@ -11,16 +10,7 @@ app = FastAPI(
 )
 
 app.include_router(endpoints.router, prefix="/api/v1")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
-
+register_middlewares(app)
 
 if __name__ == "__main__":
     import uvicorn
