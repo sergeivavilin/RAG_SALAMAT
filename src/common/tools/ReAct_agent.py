@@ -90,11 +90,11 @@ def create_order(
      Перечень товаров
     """
     total = sum(item.quantity * item.price for item in items)
-    print(f"----{total}-----")
+
     template = (
         f"Ваш Заказ: "
         f"Адрес Аптеки: {pharmacy_address}\n"
-        f"Адрес доставки: {delivery_address or ''}\n"
+        f"Адрес доставки: {pharmacy_address if total < 15000 else delivery_address}\n"
         f"Имя клиента: {client_name}\n"
         f"Номер клиента: {client_number}\n"
         f"Метод оплаты: {payment}\n\n"
