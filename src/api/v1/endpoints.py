@@ -28,7 +28,7 @@ async def ask_agent(
             inputs = {"messages": [("user", user_input)]}
             config = {"configurable": {"thread_id": thread_id}}
         else:
-            raise
+            raise ValueError
 
     except ValueError:
         raise HTTPException(
@@ -62,10 +62,10 @@ async def get_postgres_db_status(
 ) -> Dict[str, Any]:
     try:
         version = get_db_session.scalar(text("SELECT version();"))
-    except Exception:
+    except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error connecting to DB",
+            detail=f"Error connecting to DB {e}",
         )
     return {"status": status.HTTP_200_OK, "DB_version": version}
 
