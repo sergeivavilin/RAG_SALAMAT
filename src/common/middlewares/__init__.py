@@ -1,5 +1,5 @@
-from src.common.middlewares.log_middleware import log_middleware
+from src.common.middlewares.middleware_register import register_middlewares
 
 __all__ = [
-    "log_middleware",
+    "register_middlewares",
 ]
