@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from src.api.v1 import endpoints
+from src.common.middlewares import log_middleware
 
 app = FastAPI(
     title="FastAPI Test Salamat",
@@ -16,6 +18,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
 
 
 if __name__ == "__main__":
