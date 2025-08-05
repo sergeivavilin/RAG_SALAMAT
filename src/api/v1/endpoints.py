@@ -1,7 +1,7 @@
 from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, text
+from sqlalchemy import select, text, func
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.requests import Request
@@ -72,12 +72,14 @@ async def get_postgres_db_status(
     return {"status": status.HTTP_200_OK, "DB_version": version}
 
 
-@router.get("/get_all_products", tags=["database"])
-async def get_all_products(db: Annotated[Session, Depends(get_db)]) -> Dict[str, Any]:
-    products = db.scalars(select(Product)).all()
+@router.get("/get_amount_products", tags=["database"])
+async def get_amount_products(
+    db: Annotated[Session, Depends(get_db)],
+) -> Dict[str, Any]:
+    amount_products = db.scalar(select(func.count()).select_from(Product))
     return {
         "status_code": status.HTTP_200_OK,
-        "message": f"Total products: {len(products)}",
+        "message": f"Total products: {amount_products}",
     }
 
 
