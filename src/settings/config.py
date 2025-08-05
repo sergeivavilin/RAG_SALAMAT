@@ -30,6 +30,7 @@ def _get_system_prompt() -> str:
 
 
 AGENT_PROMPT = _get_system_prompt()
+MAX_HISTORY_LENGTH = 15
 
 
 class OpenAIModel(BaseModel):
@@ -56,3 +57,34 @@ class LLMSettings(OpenAIModel):
     system_prompt: Optional[str] = Field(
         default=AGENT_PROMPT, description="Системный промпт для модели"
     )
+
+
+class PineconeSettings(BaseModel):
+    dimension: int = Field(default=1536, description="Размерность эмбеддинга")
+    index_name: str = Field(
+        default="salamat-names", description="Название индекса в Pinecone"
+    )
+    index_host: str = Field(
+        default="https://salamat-names-rkhbx77.svc.gcp-europe-west4-de1d.pinecone.io",
+        description="Хост индекса в Pinecone",
+    )
+    namespace: str = Field(
+        default="price without costs", description="Пространство имен в Pinecone"
+    )
+    # Embeddings
+    embedding_model: str = Field(
+        default="text-embedding-3-small", description="Название модели для эмбеддинга"
+    )
+    openai_api_key: Optional[str] = Field(
+        default=os.getenv("OPENAI_API_KEY"), description="API-ключ"
+    )
+
+    pinecone_api_key: Optional[str] = Field(
+        default=os.getenv("PINECONE_API_KEY"),
+        description="API-ключ Pinecone",
+    )
+    # Text splitting
+    chunk_size: int = Field(default=200, description="Размер чанка для разбивки текста")
+    chunk_overlap: int = Field(default=50, description="Пересечение чанков")
+    # Search config
+    search_k: int = Field(default=10, description="Количество результатов поиска")
