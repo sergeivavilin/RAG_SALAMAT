@@ -11,7 +11,11 @@ from langgraph.prebuilt import ToolNode
 from src.common.llm_model import LLM
 from src.common.Schemas.pharmacy_schemas import ItemOrder, Order
 from src.common.vector_store import search_vector_store
-from src.db.CRUD import get_all_pharmacies_by_product_name, get_product_price
+from src.db.CRUD import (
+    get_all_pharmacies_by_product_name,
+    get_product_price,
+    get_products_by_name,
+)
 from src.settings.config import AGENT_PROMPT
 
 load_dotenv()
@@ -50,9 +54,11 @@ def check_phone_number(phone_number: str) -> Optional[str]:
 
 
 @tool  # type: ignore
-def find_product_in_vector_store(product_name: str) -> str:
+def find_product_in_vector_store(product_name: str) -> Any:
     """Find similar products in vector store."""
-    search_result = search_vector_store(product_name)
+    search_result = get_products_by_name(product_name.lower())
+    if not search_result:
+        search_result = search_vector_store(product_name)  # type: ignore
     return search_result
 
 
@@ -149,4 +155,4 @@ graph.add_conditional_edges(
 
 graph.add_edge("tools", "agent")
 
-agent = graph.compile(checkpointer=InMemorySaver(), debug=False)
+agent = graph.compile(checkpointer=InMemorySaver(), debug=True)
