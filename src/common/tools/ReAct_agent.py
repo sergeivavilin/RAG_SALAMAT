@@ -10,7 +10,7 @@ from langgraph.prebuilt import ToolNode
 
 from src.common.llm_model import LLM
 from src.common.Schemas.pharmacy_schemas import ItemOrder, Order
-from src.common.vector_store import search_vector_store
+from src.common.vector_store import vector_store
 from src.db.CRUD import (
     get_all_pharmacies_by_product_name,
     get_product_price,
@@ -58,7 +58,7 @@ def find_product_in_vector_store(product_name: str) -> Any:
     """Find similar products in vector store."""
     search_result = get_products_by_name(product_name.lower())
     if not search_result:
-        search_result = search_vector_store(product_name)  # type: ignore
+        search_result = vector_store.search(product_name)
     return search_result
 
 
