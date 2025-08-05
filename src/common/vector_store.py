@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -43,6 +45,27 @@ class VectorStore:
             # Если это список документов, склеим их содержимое
             return "\n".join(str(doc) for doc in results)
         return str(results)
+
+    def __delete(self) -> str:
+        try:
+            self.index.delete(delete_all=True, namespace=self.config.namespace)
+        except Exception as e:
+            return f"Index deletion failed with error: {e}"
+        return f"Index {self.config.index_name} deleted successfully."
+
+    def rebuild_vector_store(self, products_names: Optional[List[str]]) -> str:
+        self.__delete()
+        try:
+            self.vector_store.add_texts(
+                texts=products_names,
+                namespace="test_space",
+            )
+        except Exception as e:
+            if "Index does not exist" in str(e):
+                return f"Error: Index {self.config.index_name} does not exist."
+            else:
+                return f"Error: {e}"
+        return "Index rebuilt successfully."
 
 
 vector_store = VectorStore()
