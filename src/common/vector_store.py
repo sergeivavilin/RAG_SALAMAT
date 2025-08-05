@@ -14,7 +14,7 @@ pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
 index = pc.Index(
     name="salamat-names",
-    host="https://salamat-names-rkhbx77.svc.aped-4627-b74a.pinecone.io",
+    host="https://salamat-names-rkhbx77.svc.gcp-europe-west4-de1d.pinecone.io",
 )
 
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small", dimensions=1536)
