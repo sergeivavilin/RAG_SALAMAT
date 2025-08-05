@@ -7,7 +7,7 @@ from starlette import status
 from starlette.requests import Request
 
 from src.common.tools.ReAct_agent import agent
-from src.db.CRUD import create_db, drop_db, update_db
+from src.db.CRUD import create_db, drop_db, update_db, update_vector_store
 from src.db.database import get_db
 from src.db.Models import Pharmacy, Product
 from src.common.logger import logger
@@ -145,3 +145,9 @@ async def get_product(
         }
     else:
         return {"message": f"Product {product_name} not found!"}
+
+
+@router.get("/update_vector", tags=["update vector"])
+async def update_vector() -> Dict[str, str]:
+    status_message = update_vector_store()
+    return {"status message": status_message}
