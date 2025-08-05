@@ -58,7 +58,7 @@ class VectorStore:
         try:
             self.vector_store.add_texts(
                 texts=products_names,
-                namespace="test_space",
+                namespace=self.config.namespace,
             )
         except Exception as e:
             if "Index does not exist" in str(e):
