@@ -125,3 +125,19 @@ async def update_db_from_1c(
 async def delete_db() -> Dict[str, Any]:
     message = drop_db()
     return {"status_code": 201, "message": f"{message}"}
+
+
+@router.get("/get_product", tags=["get_product check"])
+async def get_product(
+    request: Request, db: Annotated[Session, Depends(get_db)], product_name: str
+) -> Dict[str, Any]:
+    products = db.scalars(
+        select(Product).where(Product.name.ilike(f"%{product_name.lower()}%"))
+    )
+
+    if products:
+        return {
+            "product": [product.name for product in products],
+        }
+    else:
+        return {"message": f"Product {product_name} not found!"}
