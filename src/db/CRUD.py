@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.common.Schemas.pharmacy_schemas import PharmacyProductSchema
+from src.common.vector_store import vector_store
 from src.db.database import engine, get_db
 from src.db.db_logger_config import db_logger
 from src.db.Models import Base, Pharmacy, PharmacyProduct, Product
@@ -222,3 +223,21 @@ def get_products_by_name(product_name: str) -> Optional[List[str]]:
     if products:
         return [product.name for product in products]
     return None
+
+
+def get_all_products() -> Optional[List[str]]:
+    db = next(get_db())
+    products = db.scalars(select(Product)).all()
+    if products:
+        return [product.name for product in products]
+    return None
+
+
+def update_vector_store() -> Any:
+    products_names = get_all_products()
+    if products_names:
+        status_message = vector_store.rebuild_vector_store(
+            products_names=products_names
+        )
+        return status_message
+    return "No products found"
