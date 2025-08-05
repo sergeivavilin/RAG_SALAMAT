@@ -212,3 +212,13 @@ def get_product_price(product_name: str, pharmacy_address: str) -> Any:
     if not pharmacy_product:
         return None
     return pharmacy_product.price
+
+
+def get_products_by_name(product_name: str) -> Optional[List[str]]:
+    db = next(get_db())
+    products = db.scalars(
+        select(Product).where(Product.name.ilike(f"%{product_name.lower()}%"))
+    )
+    if products:
+        return [product.name for product in products]
+    return None
