@@ -79,6 +79,7 @@ def get_current_price_for_product(product_name: str, address: str) -> Any:
 @tool(parse_docstring=True, args_schema=Order)  # type: ignore
 def create_order(
     pharmacy_address: str,
+    pharmacy_phone: str,
     delivery_address: str,
     client_name: str,
     client_number: str,
@@ -89,6 +90,7 @@ def create_order(
     Создать заказ по шаблону.
     В аргументе должны быть данные о заказе:
      Адрес Аптеки,
+     Телефон Аптеки,
      Адрес доставки,
      Имя клиента,
      Номер клиента,
@@ -100,6 +102,7 @@ def create_order(
     template = (
         f"Ваш Заказ: "
         f"Адрес Аптеки: {pharmacy_address}\n"
+        f"Телефон Аптеки: {pharmacy_phone}\n"
         f"Адрес доставки: {pharmacy_address if total < 15000 else delivery_address}\n"
         f"Имя клиента: {client_name}\n"
         f"Номер клиента: {client_number}\n"
