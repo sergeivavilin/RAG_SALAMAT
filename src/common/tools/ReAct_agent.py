@@ -56,10 +56,10 @@ def check_phone_number(phone_number: str) -> Optional[str]:
 @tool  # type: ignore
 def find_product_in_vector_store(product_name: str) -> Any:
     """Find similar products in vector store."""
-    search_result = get_products_by_name(product_name.lower())
-    if not search_result:
-        search_result = vector_store.search(product_name)
-    return search_result
+    db_search_result = get_products_by_name(product_name.lower())
+    if not db_search_result:
+        return vector_store.search(product_name)
+    return db_search_result
 
 
 @tool  # type: ignore
