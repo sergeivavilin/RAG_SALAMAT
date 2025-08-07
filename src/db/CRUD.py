@@ -7,9 +7,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from src.common.Schemas.pharmacy_schemas import PharmacyProductSchema
+from src.common.logger import logger
 from src.common.vector_store import vector_store
 from src.db.database import engine, get_db
-from src.db.db_logger_config import db_logger
 from src.db.Models import Base, Pharmacy, PharmacyProduct, Product
 
 
@@ -24,10 +24,10 @@ def create_db() -> str:
         Base.metadata.create_all(bind=engine)
     except Exception as exp:
         if "already exists" in str(exp):
-            db_logger.info("Database already exists")
+            logger.info("Database already exists")
             return "Database already exists"
         else:
-            db_logger.error(f"Failed to create database: {exp}")
+            logger.error("Failed to create database: %s", exp)
             raise
     else:
         return "Database created successfully"
@@ -43,10 +43,10 @@ def drop_db() -> str:
         Base.metadata.drop_all(bind=engine)
     except Exception as exp:
         if "does not exist" in str(exp):
-            db_logger.info("Database does not exist")
+            logger.info("Database does not exist")
             return "Database does not exist"
         else:
-            db_logger.error(f"Failed to drop database: {exp}")
+            logger.error("Failed to drop database: %s", exp)
             raise
     else:
         return "Database dropped successfully"
@@ -149,7 +149,7 @@ def update_db(
         try:
             price_product = int(item.price)
         except Exception as exp:
-            db_logger.error(f"Price error: {exp} | Product: {item}")
+            logger.error("Price error: %s | Product: %s", exp, item)
             continue
         product_id = existing_products[item.product.name]
         pharmacy_id = existing_pharmacies[item.pharmacy.address]
