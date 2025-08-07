@@ -233,6 +233,37 @@ def get_all_products() -> Optional[List[str]]:
     return None
 
 
+# Костыль по обновлению записей в таблице Pharmacy
+def update_pharmacy_phone(pharmacies: Optional[Dict[str, str]]) -> Any:
+    db = next(get_db())
+    if pharmacies is None:
+        pharmacies = {
+            "E 753 (Sat city)": "77026313485",
+            "Абылайхана 32": "77020077175",
+            "Кайым Мухамедханова 17": "77019955190",
+            "Кошкарбаева 56": "77029104095",
+            "Майлина 14": "77783015777",
+            "Мангилик Ел 21": "77022590126",
+            "Мангилик Ел 36": "77022530485",
+            "Мангилик Ел 49": "77025314485",
+            "Мангилик Ел 52": "77750695104",
+            "Мангилик Ел 59": "77055501572",
+            "Сарайшык 7": "77786038047",
+            "Сауран 5": "77783014777",
+            "Улы Дала 71": "77476513816",
+        }
+    try:
+        for address, phone in pharmacies.items():
+            pharmacy = db.scalar(select(Pharmacy).where(Pharmacy.address == address))
+            if pharmacy:
+                pharmacy.phone = phone
+        db.commit()
+    except Exception as e:
+        return f"Ошибка обновления телефонов: {e}"
+
+    return "Все телефоны обновлены успешно"
+
+
 def update_vector_store() -> Any:
     products_names = get_all_products()
     if products_names:
