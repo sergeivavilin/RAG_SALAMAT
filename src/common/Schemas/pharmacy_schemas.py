@@ -61,6 +61,7 @@ class Order(BaseModel):
 
     pharmacy_address: str = Field(description="Адрес аптеки")
     delivery_address: str = Field(description="Адрес доставки или самовывоз")
+    pharmacy_phone: str = Field(description="Телефон аптеки")
     client_name: str = Field(description="Имя клиента")
     client_number: str = Field(description="Номер клиента")
     payment: str = Field(description="Метод оплаты, например наличные или kaspi")
@@ -69,6 +70,7 @@ class Order(BaseModel):
     def __repr__(self) -> str:
         return (
             f"<Order({self.pharmacy_address=}, "
+            f"{self.pharmacy_phone=}, "
             f"{self.delivery_address=}, "
             f"{self.client_name=}), "
             f"{self.client_number=}, "
