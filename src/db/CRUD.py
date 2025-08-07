@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated, Any, Dict, List, Optional
 
 import requests  # type: ignore
@@ -164,6 +165,12 @@ def update_db(
     if pharm_prod_prices:
         db.bulk_save_objects(pharm_prod_prices)
     db.commit()
+    # Обновление vector store по понедельникам с 8-9 утра
+    now = datetime.now()
+    if now.weekday() == 0 and (8 <= now.hour <= 9):
+        logger.info("Starting to rebuild vector store")
+        status_update = update_vector_store()
+        logger.info("Vector store rebuilt status: %s", status_update)
 
     return counter
 
