@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Dict, Optional
+from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, text, func
@@ -12,7 +12,6 @@ from src.db.CRUD import (
     drop_db,
     update_db,
     update_vector_store,
-    update_pharmacy_phone,
 )
 from src.db.database import get_db
 from src.db.Models import Pharmacy, Product
@@ -156,12 +155,4 @@ async def get_product(
 @router.get("/update_vector", tags=["update vector"])
 async def update_vector() -> Dict[str, str]:
     status_message = update_vector_store()
-    return {"status message": status_message}
-
-
-@router.post("/update_phones", tags=["update phones"])
-async def update_phones(
-    pharmacy_dict: Optional[Dict[str, str]] = None,
-) -> Dict[str, str]:
-    status_message = update_pharmacy_phone(pharmacy_dict)
     return {"status message": status_message}
