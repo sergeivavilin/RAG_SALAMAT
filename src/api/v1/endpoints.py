@@ -159,7 +159,7 @@ async def update_vector() -> Dict[str, str]:
     return {"status message": status_message}
 
 
-@router.get("/update_phones", tags=["update phones"])
+@router.post("/update_phones", tags=["update phones"])
 async def update_phones(
     pharmacy_dict: Optional[Dict[str, str]] = None,
 ) -> Dict[str, str]:
