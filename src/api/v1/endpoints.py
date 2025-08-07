@@ -1,20 +1,22 @@
 from typing import Annotated, Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, text, func
+
+# from sqlalchemy import text, func, select
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.requests import Request
 
 from src.common.tools.ReAct_agent import agent
 from src.db.CRUD import (
-    create_db,
-    drop_db,
+    # create_db,
+    # drop_db,
     update_db,
-    update_vector_store,
+    # update_vector_store,
 )
 from src.db.database import get_db
-from src.db.Models import Pharmacy, Product
+
+# from src.db.Models import Pharmacy, Product
 from src.common.logger import logger
 
 router: APIRouter = APIRouter()
@@ -63,47 +65,47 @@ async def ask_agent(
     return {"answer": ai_answer}
 
 
-@router.get("/status_DB", tags=["database"])
-async def get_postgres_db_status(
-    get_db_session: Annotated[Session, Depends(get_db)], request: Request
-) -> Dict[str, Any]:
-    try:
-        version = get_db_session.scalar(text("SELECT version();"))
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error connecting to DB {e}",
-        )
-    return {"status": status.HTTP_200_OK, "DB_version": version}
+# @router.get("/status_DB", tags=["database"])
+# async def get_postgres_db_status(
+#     get_db_session: Annotated[Session, Depends(get_db)], request: Request
+# ) -> Dict[str, Any]:
+#     try:
+#         version = get_db_session.scalar(text("SELECT version();"))
+#     except Exception as e:
+#         raise HTTPException(
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             detail=f"Error connecting to DB {e}",
+#         )
+#     return {"status": status.HTTP_200_OK, "DB_version": version}
 
 
-@router.get("/get_amount_products", tags=["database"])
-async def get_amount_products(
-    db: Annotated[Session, Depends(get_db)],
-) -> Dict[str, Any]:
-    amount_products = db.scalar(select(func.count()).select_from(Product))
-    return {
-        "status_code": status.HTTP_200_OK,
-        "message": f"Total products: {amount_products}",
-    }
+# @router.get("/get_amount_products", tags=["database"])
+# async def get_amount_products(
+#     db: Annotated[Session, Depends(get_db)],
+# ) -> Dict[str, Any]:
+#     amount_products = db.scalar(select(func.count()).select_from(Product))
+#     return {
+#         "status_code": status.HTTP_200_OK,
+#         "message": f"Total products: {amount_products}",
+#     }
 
 
-@router.get("/get_all_pharmacies", tags=["database"])
-async def get_all_pharmacies(db: Annotated[Session, Depends(get_db)]) -> Dict[str, Any]:
-    pharmacies = db.scalars(select(Pharmacy)).all()
-    return {"status_code": 201, "message": f"Total pharmacies: {pharmacies}"}
+# @router.get("/get_all_pharmacies", tags=["database"])
+# async def get_all_pharmacies(db: Annotated[Session, Depends(get_db)]) -> Dict[str, Any]:
+#     pharmacies = db.scalars(select(Pharmacy)).all()
+#     return {"status_code": 201, "message": f"Total pharmacies: {pharmacies}"}
 
 
-@router.post("/create_DB", tags=["database"])
-async def create_tables() -> Dict[str, Any]:
-    try:
-        message = create_db()
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Error creating tables"
-        )
-    else:
-        return {"status_code": status.HTTP_200_OK, "transaction": f"{message}"}
+# @router.post("/create_DB", tags=["database"])
+# async def create_tables() -> Dict[str, Any]:
+#     try:
+#         message = create_db()
+#     except Exception:
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST, detail="Error creating tables"
+#         )
+#     else:
+#         return {"status_code": status.HTTP_200_OK, "transaction": f"{message}"}
 
 
 @router.post("/update_DB", tags=["database"])
@@ -130,29 +132,29 @@ async def update_db_from_1c(
     }
 
 
-@router.delete("/drop_DB", tags=["delete DB"])
-async def delete_db() -> Dict[str, Any]:
-    message = drop_db()
-    return {"status_code": 201, "message": f"{message}"}
+# @router.delete("/drop_DB", tags=["delete DB"])
+# async def delete_db() -> Dict[str, Any]:
+#     message = drop_db()
+#     return {"status_code": 201, "message": f"{message}"}
 
 
-@router.get("/get_product", tags=["get_product check"])
-async def get_product(
-    request: Request, db: Annotated[Session, Depends(get_db)], product_name: str
-) -> Dict[str, Any]:
-    products = db.scalars(
-        select(Product).where(Product.name.ilike(f"%{product_name.lower()}%"))
-    )
-
-    if products:
-        return {
-            "product": [product.name for product in products],
-        }
-    else:
-        return {"message": f"Product {product_name} not found!"}
-
-
-@router.get("/update_vector", tags=["update vector"])
-async def update_vector() -> Dict[str, str]:
-    status_message = update_vector_store()
-    return {"status message": status_message}
+# @router.get("/get_product", tags=["get_product check"])
+# async def get_product(
+#     request: Request, db: Annotated[Session, Depends(get_db)], product_name: str
+# ) -> Dict[str, Any]:
+#     products = db.scalars(
+#         select(Product).where(Product.name.ilike(f"%{product_name.lower()}%"))
+#     )
+#
+#     if products:
+#         return {
+#             "product": [product.name for product in products],
+#         }
+#     else:
+#         return {"message": f"Product {product_name} not found!"}
+#
+#
+# @router.get("/update_vector", tags=["update vector"])
+# async def update_vector() -> Dict[str, str]:
+#     status_message = update_vector_store()
+#     return {"status message": status_message}
